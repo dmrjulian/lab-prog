@@ -36,7 +36,7 @@ public class PrestamoTask implements Callable<Double> {
         Double porcentajePagado = Double.valueOf(0);
         int cantClientes = clientes.size();
         for (int i = 0; i < cantClientes; i++) {
-            Prestamo[] prestamos = clientes.get(i).getPrestamo();
+            Prestamo[] prestamos = clientes.get(i).getPrestamos();
             for (int j = 0; j < prestamos.length; j++) {
                 porcentajePagado += prestamos[j].getTotal() / prestamos[j].getPagado();
             }
