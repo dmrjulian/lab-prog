@@ -18,7 +18,7 @@ public class Cliente {
     private int id;
     
     /**
-     * Nombre completo del cliente.
+     * Nombre completo del 0cliente.
      */
     private String nombre;
     
