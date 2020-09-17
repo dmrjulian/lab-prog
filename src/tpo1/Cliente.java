@@ -81,5 +81,9 @@ public class Cliente {
     public void agregarCuentaAhorro(CuentaAhorro cuentaAhorro) {
         this.cuentasAhorro.add(cuentaAhorro);
     }
+
+    public void agregarPrestamo(Prestamo prestamo) {
+        this.prestamos.add(prestamo);
+    }
     
 }

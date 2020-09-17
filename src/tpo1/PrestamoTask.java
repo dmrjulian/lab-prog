@@ -3,7 +3,7 @@ package tpo1;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.xml.stream.events.Comment;
+
 
 /**
  * Tarea para obtener el total de balance de cuentas.
@@ -15,8 +15,6 @@ import javax.xml.stream.events.Comment;
 
 public class PrestamoTask implements Callable<Double> {
 
-    private Divisa tipoDivisa;
-
     /**
      * Los clientes a recorrer.
      */
@@ -27,7 +25,7 @@ public class PrestamoTask implements Callable<Double> {
      * 
      * @param clientes los clientes
      */
-    public PrestamoTask(List<Cliente> clientes, Divisa tipoDivisa) {
+    public PrestamoTask(List<Cliente> clientes) {
         this.clientes = clientes;
     }
 
@@ -35,13 +33,16 @@ public class PrestamoTask implements Callable<Double> {
     public Double call() throws Exception {
         Double porcentajePagado = Double.valueOf(0);
         int cantClientes = clientes.size();
+        int cantPrestamos = 0;
         for (int i = 0; i < cantClientes; i++) {
             Prestamo[] prestamos = clientes.get(i).getPrestamos();
             for (int j = 0; j < prestamos.length; j++) {
-                porcentajePagado += prestamos[j].getTotal() / prestamos[j].getPagado();
+                cantPrestamos++;
+                porcentajePagado +=  prestamos[j].getPagado() /prestamos[j].getTotal();
             }
+            
         }
-        return porcentajePagado;
+        return (porcentajePagado/cantPrestamos);
     }
 
 
