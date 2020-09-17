@@ -13,7 +13,6 @@ public class InfoClienteBase implements InfoCliente {
     public String getInfo(Cliente cliente) {
         StringBuilder info = new StringBuilder();
         
-        info.append("---").append("\n");
         info.append("id        : ").append(cliente.getId()).append("\n");
         info.append("nombre    : ").append(cliente.getNombre()).append("\n");
         info.append("direccion : ").append(cliente.getDireccion()).append("\n");
