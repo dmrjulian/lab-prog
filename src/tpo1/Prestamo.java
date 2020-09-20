@@ -8,6 +8,11 @@ package tpo1;
  * @author {@literal Diego P. M. Baltar <diego.baltar@est.fi.uncoma.edu.ar>}
  */
 public class Prestamo {
+    
+    /**
+     * La divisa de la cuenta.
+     */
+    private final Divisa divisa;
 
     /**
      * Cantidad de cuotas.
@@ -37,11 +42,13 @@ public class Prestamo {
     /**
      * Constructor.
      * 
+     * @param divisa la divisa
      * @param cuotas la cantidad de cuotas
      * @param total la cantidad total
      * @param tasa la tasa
      */
-    public Prestamo(int cuotas, double total, double tasa) {
+    public Prestamo(Divisa divisa, int cuotas, double total, double tasa) {
+        this.divisa = divisa;
         this.tasa = tasa;
         this.cuotas = cuotas;
         this.total = total;
@@ -57,6 +64,15 @@ public class Prestamo {
     public void registrarPago(int cantidadCuotas, double monto) {
         cuotasPagas += cantidadCuotas;
         pagado += monto;
+    }
+    
+    /**
+     * Devuelve la divisa del préstamo.
+     * 
+     * @return la divisa del préstamo
+     */
+    public Divisa getDivisa() {
+        return divisa;
     }
 
     /**
