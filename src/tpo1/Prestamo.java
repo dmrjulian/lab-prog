@@ -9,12 +9,38 @@ package tpo1;
  */
 public class Prestamo {
 
+    /**
+     * Cantidad de cuotas.
+     */
     private int cuotas;
+    
+    /**
+     * Cantidad de cuotas pagas.
+     */
     private int cuotasPagas;
+    
+    /**
+     * Total a pagar.
+     */
     private double total;
+    
+    /**
+     * Total pagado.
+     */
     private double pagado;
+    
+    /**
+     * Tasa del prestamo.
+     */
     private double tasa;
     
+    /**
+     * Constructor.
+     * 
+     * @param cuotas la cantidad de cuotas
+     * @param total la cantidad total
+     * @param tasa la tasa
+     */
     public Prestamo(int cuotas, double total, double tasa) {
         this.tasa = tasa;
         this.cuotas = cuotas;
@@ -22,49 +48,60 @@ public class Prestamo {
         this.pagado = 0;
     }
     
+    /**
+     * Registra un pago al pŕestamo.
+     * 
+     * @param cantidadCuotas la cantidad de cuotas a cubrir
+     * @param monto el monto pagado
+     */
     public void registrarPago(int cantidadCuotas, double monto) {
         cuotasPagas += cantidadCuotas;
         pagado += monto;
     }
 
+    /**
+     * Devuelve la cantidad de cuotas pagas del pŕestamo.
+     * 
+     * @return la cantidad de cuotas pagas del pŕestamo
+     */
     public int getCuotasPagas() {
         return cuotasPagas;
     }
 
-    public void setCuotasPagas(int cuotasPagas) {
-        this.cuotasPagas = cuotasPagas;
-    }
-
+    /**
+     * Devuelve la cantidad de cuotas del pŕestamo.
+     * 
+     * @return la cantidad de cuotas del pŕestamo
+     */
     public int getCuotas() {
         return cuotas;
     }
 
-    public void setCuotas(int cuotas) {
-        this.cuotas = cuotas;
-    }
-
+    /**
+     * Devuelve el total del pŕestamo.
+     * 
+     * @return el total del pŕestamo
+     */
     public double getTotal() {
         return total;
     }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
+    
+    /**
+     * Devuelve el total pagado.
+     * 
+     * @return el total pagado
+     */
     public double getPagado() {
         return pagado;
     }
 
-    public void setPagado(double pagado) {
-        this.pagado = pagado;
-    }
-
+    /**
+     * Devuelve la tasa del préstamo.
+     * 
+     * @return la tasa del préstamo
+     */
     public double getTasa() {
         return tasa;
-    }
-
-    public void setTasa(double tasa) {
-        this.tasa = tasa;
     }
     
 }
