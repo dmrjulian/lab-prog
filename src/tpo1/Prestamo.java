@@ -35,21 +35,14 @@ public class Prestamo {
     private double pagado;
     
     /**
-     * Tasa del prestamo.
-     */
-    private double tasa;
-    
-    /**
      * Constructor.
      * 
      * @param divisa la divisa
      * @param cuotas la cantidad de cuotas
      * @param total la cantidad total
-     * @param tasa la tasa
      */
-    public Prestamo(Divisa divisa, int cuotas, double total, double tasa) {
+    public Prestamo(Divisa divisa, int cuotas, double total) {
         this.divisa = divisa;
-        this.tasa = tasa;
         this.cuotas = cuotas;
         this.total = total;
         this.pagado = 0;
@@ -109,15 +102,6 @@ public class Prestamo {
      */
     public double getPagado() {
         return pagado;
-    }
-
-    /**
-     * Devuelve la tasa del préstamo.
-     * 
-     * @return la tasa del préstamo
-     */
-    public double getTasa() {
-        return tasa;
     }
     
 }
