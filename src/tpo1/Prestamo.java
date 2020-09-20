@@ -38,13 +38,13 @@ public class Prestamo {
      * Constructor.
      * 
      * @param divisa la divisa
-     * @param cuotas la cantidad de cuotas
      * @param total la cantidad total
+     * @param cuotas la cantidad de cuotas
      */
-    public Prestamo(Divisa divisa, int cuotas, double total) {
+    public Prestamo(Divisa divisa, double total, int cuotas) {
         this.divisa = divisa;
-        this.cuotas = cuotas;
         this.total = total;
+        this.cuotas = cuotas;
         this.pagado = 0;
     }
     
