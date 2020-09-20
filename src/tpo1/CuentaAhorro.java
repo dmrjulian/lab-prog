@@ -18,6 +18,10 @@ public class CuentaAhorro {
         this.divisa = divisa;
     }
     
+    public CuentaAhorro() {
+        this(null, null);
+    }
+    
     public Divisa getDivisa() {
         return divisa;
     }
