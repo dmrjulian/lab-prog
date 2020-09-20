@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Obtiene clientes desde un archivo CSV.
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author {@literal Gabriela Gili <gabriela.gili@est.fi.uncoma.edu.ar>}
  * @author {@literal Diego P. M. Baltar <diego.baltar@est.fi.uncoma.edu.ar>}
  */
-public class Clientes {
+public final class Clientes {
     
     private static final String ARCHIVO_CLIENTES = "src/tpo1/clientes.csv";
 
@@ -22,7 +23,7 @@ public class Clientes {
      * 
      * @return arreglo de clientes
      */
-    public static Cliente[] obtenerClientes() {
+    public static final Cliente[] obtenerClientes() {
         Cliente[] clientes = null;
         
         try {
@@ -55,6 +56,8 @@ public class Clientes {
                                     ));
                 }
                 
+                generarCuentasAhorro(cliente);
+                
                 listaClientes.add(cliente);
                 numLinea++;
             }
@@ -74,6 +77,18 @@ public class Clientes {
         }
         
         return clientes;
+    }
+    
+    private static final void generarCuentasAhorro(Cliente cliente) {
+        CuentaAhorro cuentaAhorro;
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        
+        System.out.println(random.nextInt(1, 11));
+        System.out.println(random.nextDouble(0, 10000000));
+        
+        cuentaAhorro = new CuentaAhorro();
+        cuentaAhorro.depositar(57153.86);
+        //cliente.agregarCuentaAhorro(cuentaAhorro);
     }
     
 }
