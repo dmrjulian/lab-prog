@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -30,19 +31,18 @@ public final class Clientes {
     private static int numeroCuentaCbu = 1;
 
     /**
-     * Devuelve arreglo de clientes.
+     * Devuelve lista de clientes.
      * 
-     * @return arreglo de clientes
+     * @return lista de clientes
      */
-    public static final Cliente[] obtenerClientes() {
-        Cliente[] clientes = null;
+    public static final List<Cliente> obtenerClientes() {
+        ArrayList<Cliente> clientes = new ArrayList<>();
         
         try {
             FileReader lectorArchivo = new FileReader(ARCHIVO_CLIENTES);
             BufferedReader bufferLectura = new BufferedReader(lectorArchivo);
             String linea = null;
             int numLinea = 1;
-            ArrayList<Cliente> listaClientes = new ArrayList<>();
             
             // Ignorar primera linea
             bufferLectura.readLine();
@@ -70,13 +70,8 @@ public final class Clientes {
                 generarCuentasAhorro(cliente);
                 generarPrestamos(cliente);
                 
-                listaClientes.add(cliente);
+                clientes.add(cliente);
                 numLinea++;
-            }
-            
-            // Convertir lista a arreglo
-            if (!listaClientes.isEmpty()) {
-                clientes = listaClientes.toArray(new Cliente[0]);
             }
 
             bufferLectura.close();
@@ -155,7 +150,7 @@ public final class Clientes {
             deuda = Math.round(deuda * 100.0) / 100.0;
             cuotas = aleatorio.nextInt(0, 84);
             divisa = aleatorio.nextInt(0, divisas.length);
-            prestamo = new Prestamo(divisas[divisa], deuda, cuotas);
+            prestamo = new Prestamo(divisas[divisa], deuda, cuotas, 0);
             
             if (aleatorio.nextInt(0, 100) >= 80) {
                 prestamo.registrarPago(

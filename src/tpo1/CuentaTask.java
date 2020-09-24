@@ -32,6 +32,15 @@ public class CuentaTask implements Callable<Double> {
         this.clientes = clientes;
         this.tipoDivisa = tipoDivisa;
     }
+    
+    /**
+     * Devuelve el tipo de divisa.
+     * 
+     * @return el tipo de divisa
+     */
+    public Divisa getDivisa() {
+        return tipoDivisa;
+    }
 
     /**
      * Suma el balance total de cuentas de clientes del tipo de divisa dado.

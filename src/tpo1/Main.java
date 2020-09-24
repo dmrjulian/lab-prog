@@ -1,13 +1,12 @@
 package tpo1;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import javax.xml.stream.events.Comment;
+import java.util.concurrent.ThreadLocalRandom;
 
 import Utiles.TecladoIn;
 
@@ -20,213 +19,119 @@ import Utiles.TecladoIn;
  * @author {@literal Diego P. M. Baltar <diego.baltar@est.fi.uncoma.edu.ar>}
  */
 public class Main {
+    
+    private static List<Cliente> clientes;
 
     public static void main(String[] args) {
-        Cliente cliente;
-        CuentaAhorro cuentaAhorro;
-        InfoCliente infoCliente;
-
-        // Creare cliente
-        cliente = new Cliente();
-        cliente.setId(1235);
-        cliente.setNombre("Diego Baltar");
-        cliente.setDireccion("Italia y Jujuy, Neuquén");
-        cliente.setTelefono("+5492995215871");
-
-        // Agregar 2 cuentas al cliente
-        cuentaAhorro = new CuentaAhorro(Divisa.ARS, "0970590940000000001235");
-        cuentaAhorro.depositar(57153.86);
-        cliente.agregarCuentaAhorro(cuentaAhorro);
-        cuentaAhorro = new CuentaAhorro(Divisa.USD, "0970590950000005872852");
-        cuentaAhorro.depositar(500.00);
-        cliente.agregarCuentaAhorro(cuentaAhorro);
-
-        // Generar info del cliente
-        infoCliente = new InfoClienteBase();
-
-        System.out.println("Ejemplo sin decorador:");
-        System.out.println(infoCliente.getInfo(cliente));
-
-        infoCliente = new DecoradorInfoCuentas(infoCliente);
-
-        System.out.println("Ejemplo con decorador de cuentas:");
-        System.out.println(infoCliente.getInfo(cliente));
-
-
-
-        pruebaExecutorService();
-
-    }
-
-    public static void pruebaExecutorService() {
-
-        // estas listas simulan ser particiones de las BD
-        List<Cliente> lista0 = new ArrayList<>();
-        List<Cliente> lista1 = new ArrayList<>();
-        List<Cliente> lista2 = new ArrayList<>();
-        List<Cliente> lista3 = new ArrayList<>();
-        // for (int i = 0; i < 16; i++) {
-        //     Cliente clienteAleatorio = crearClienteRandom();
-        //     lista0.add(clienteAleatorio);
-        // }
-        // for (int i = 0; i < 22; i++) {
-        //     Cliente clienteAleatorio = crearClienteRandom();
-        //     lista1.add(clienteAleatorio);
-        // }
-        // for (int i = 0; i < 1000; i++) {
-        //     Cliente clienteAleatorio = crearClienteRandom();
-        //     lista2.add(clienteAleatorio);
-        // }
-        // for (int i = 0; i < 5; i++) {
-        //     Cliente clienteAleatorio = crearClienteRandom();
-        //     lista3.add(clienteAleatorio);
-        // }
-
-        // creamos el pool para los hilos donde van a ir las tareas
-        ExecutorService service = Executors.newFixedThreadPool(10);
-        
-
-        Future<Double> futuroTarea1 = service.submit(new PrestamoTask(lista1));
-
-        try {
-            System.out.println(futuroTarea1.get());
-
-
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        service.shutdown();
-
+        clientes = Clientes.obtenerClientes();
+        menu();
     }
 
     public static void menu() {
-
         boolean sigue = true;
         int eleccion = 99;
-        int cantClientes;
-        int cantPresMax;
-        int cantPresMin;
-        Cliente[] clts =null;
+        
         while (sigue) {
             System.out.println("1: Mostrar Clientes Cargados");
-            System.out.println("2: Mostrar Patrón Decorator en la Info. del Cliente");
-            System.out.println("3: Mostrar el uso de Executor Service con los hilos(Collable) CuentaTask");
-            System.out.println("4: Crear algunos clientes aleatorios y asignarle prestamos aleatorios");
-            System.out.println("5: Mostrar clientes aleatorios con su respectivos prestamos");
+            System.out.println("2: Patrón Decorator en la Info. del Cliente");
+            System.out.println("3: Executor Service con los hilos(Collable) CuentaTask");
             System.out.println("0: Salir ");
 
             eleccion = TecladoIn.readLineInt();
 
             switch (eleccion) {
                 case 1:
-
+                    mostrarClientes(clientes);
                     break;
                 case 2:
-
+                    pruebaPatronDecorador(clientes);
                     break;
                 case 3:
-
+                    pruebaExecutorService(clientes);
                     break;
-                case 4:
-                    System.out.print("\nIngrese la cantidad de clientes: ");
-                    cantClientes = TecladoIn.readLineInt();
-                    System.out.print("\nIngrese la cantidad mínima de prestamos: ");
-                    cantPresMin = TecladoIn.readLineInt();
-                    System.out.print("\nIngrese la cantidad máxima de prestamos: ");
-                    cantPresMax = TecladoIn.readLineInt();
-                    System.out.println("");
-                    if (cantClientes > 0 && cantPresMin > 0 && cantPresMin < cantPresMax) {
-                        clts = crearClientesRandom(cantClientes);
-                        asignarPrestamosRandom(cantPresMin, cantPresMax, clts);
-                    } else {
-                        System.out.println("Error: valores invalidos");
-                    }
-                    break;
-                case 5:
-                    if (clts!=null) {
-                        for (int i = 0; i < clts.length; i++) {
-                            System.out.println(clts[i].toString());
-                        }
-                    } else {
-                        System.err.println("Error: todavía no se selecciono la opcion 4");
-                    }
-                break;
                 case 0:
                     sigue = false;
                     break;
                 default:
                     break;
             }
-
+        }
+    }
+    
+    /**
+     * Muestra los clientes cargados.
+     * 
+     * @param clientes los clientes
+     */
+    private static void mostrarClientes(List<Cliente> clientes) {
+        InfoCliente infoCliente = new InfoClienteBase();
+        int cantidad = clientes.size();
+        
+        for (int i = 0; i < cantidad; i++) {
+            System.out.println(infoCliente.getInfo(clientes.get(i)));
+        }
+    }
+    
+    private static void pruebaPatronDecorador(List<Cliente> clientes) {
+        InfoCliente infoCliente = new InfoClienteBase();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        Cliente cliente = clientes.get(random.nextInt(0, clientes.size()));
+        
+        System.out.println("Información básica de cliente (sin decorador): ");
+        System.out.println(infoCliente.getInfo(cliente));
+        infoCliente = new DecoradorInfoCuentas(infoCliente);
+        System.out.println("Información básica y cuentas de cliente (1 decorador): ");
+        System.out.println(infoCliente.getInfo(cliente));
+        infoCliente = new DecoradorInfoPrestamos(infoCliente);
+        System.out.println("Información básica, cuentas y présamos de cliente (2 decoradores): ");
+        System.out.println(infoCliente.getInfo(cliente));
+    }
+    
+    private static void pruebaExecutorService(List<Cliente> clientes) {
+        List<Future<Double>> resultadosCuentas = new ArrayList<>();
+        List<CuentaTask> tareasCuentas = new ArrayList<>();
+        PrestamoTask tareaPrestamos = new PrestamoTask(clientes);
+        OrdenarClientesTask tareaOrdenar = new OrdenarClientesTask(clientes.toArray(new Cliente[0]));
+        Divisa[] divisas = Divisa.values();
+        
+        // Creamos el pool para los hilos donde van a ir las tareas
+        ExecutorService service = Executors.newFixedThreadPool(3);
+        Future<Double> resultadoPrestamos = service.submit(tareaPrestamos);
+        Future<String> resultadoOrdenar = service.submit(tareaOrdenar);
+        
+        // Crear tareas
+        for (int i = 0; i < divisas.length; i++) {
+            CuentaTask tareaCuenta = new CuentaTask(clientes, divisas[i]);
+            Future<Double> resultado = service.submit(tareaCuenta);
+            tareasCuentas.add(tareaCuenta);
+            resultadosCuentas.add(resultado);
         }
 
-    }
-
-    /**
-     * Método encargado de crear un arreglo de clientes aleatorio
-    */
-    public static Cliente[] crearClientesRandom(int cantClientes) {
-        Random r = new Random();
-        Cliente[] salida = new Cliente[cantClientes];
-        int id;
-        String nombre;
-        String direccion;
-        String telefono;
-        for (int i = 0; i < cantClientes; i++) {
-            id = r.nextInt();
-            nombre = "Cliente: " + id;
-            direccion = "Direccion: " + r.nextInt(999);
-            telefono = "Teléfono: " + r.nextInt(999) + "-" + r.nextInt(9999999);
-            salida[i] = new Cliente(id, nombre, direccion, telefono);
-        }
-        return salida;
-    }
-    /**
-     * Método encargado de asignar prestamos aleatorios al arreglo de clientes pasado por parametro
-    */
-    public static void asignarPrestamosRandom(int cantPresMin, int cantPresMax, Cliente[] clientes) {
- 
-        Random r = new Random();
-        int cuotas;
-        double total;
-        int cantPrestPromedio;
-        Prestamo p;
-        for (int i = 0; i < clientes.length; i++) {
-            cantPrestPromedio = r.nextInt(cantPresMax + 1) - r.nextInt(cantPresMin + 1);
-            // sumo uno porque el limite no lo toma
-            for (int j = 0; j < cantPrestPromedio; j++) {
-                cuotas = r.nextInt(12) + 1;// el +1 es xq minimo todo prestamo tiene una cuota sin pagar
-                total = r.nextDouble() * 100000;
-                p = new Prestamo(divisaRandom(), total, cuotas, 0);
-                clientes[i].agregarPrestamo(p);
+        try {
+            DecimalFormat formatter = new DecimalFormat("###,###,###.###");
+            
+            System.out.print("Clientes ordenados: ");
+            System.out.println(resultadoOrdenar.get());
+            
+            for (int i = 0; i < divisas.length; i++) {
+                System.out.println(String.format(
+                        "Total cuentas de ahorro en %s: %s",
+                        tareasCuentas.get(i).getDivisa(),
+                        formatter.format(resultadosCuentas.get(i).get())));
             }
-
+            
+            System.out.print("Porcentaje de préstamos pagados: ");
+            System.out.println(
+                    String.format("%%%.2f",
+                            resultadoPrestamos.get() * 100));
+            
+            System.out.println();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    }
+        service.shutdown();
 
-    /**
-     * Método encargado de retornar una divisa aleatoriamente
-    */
-    public static Divisa divisaRandom() {
-        Random r = new Random();
-        Divisa salida = null;
-        int d = r.nextInt(3);
-        switch (d) {
-            case 0:
-                salida = Divisa.USD;
-                break;
-            case 1:
-                salida = Divisa.ARS;
-                break;
-            case 2:
-                salida = Divisa.EUR;
-                break;
-            default:
-                break;
-        }
-        return salida;
     }
 
 }

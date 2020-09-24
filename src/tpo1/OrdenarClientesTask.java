@@ -2,18 +2,25 @@ package tpo1;
 
 import java.util.concurrent.Callable;
 
-public class OrdenarClientesTask implements Callable<Cliente[]> {
-    //hilo encargado de ordenar particiones de clientes
+public class OrdenarClientesTask implements Callable<String> {
+    // hilo encargado de ordenar particiones de clientes
     private Cliente[] clientes;
 
-    @Override
-    public Cliente[] call() throws Exception {
-        
-        quicksort(clientes, 0, clientes.length-1);
-
-        return clientes;
+    public OrdenarClientesTask(Cliente[] clientes) {
+        this.clientes = clientes;
     }
 
+    @Override
+    public String call() throws Exception {
+        String salida = "";
+        quicksort(clientes, 0, clientes.length - 1);
+
+        for (int i = 0; i < clientes.length; i++) {
+            salida += "\nCliente: " + clientes[i].getId();
+        }
+
+        return salida;
+    }
 
     public static void quicksort(Cliente[] array, int inicio, int fin) {
         int pivote;
@@ -57,18 +64,18 @@ public class OrdenarClientesTask implements Callable<Cliente[]> {
         return der;
     }
 
-    public static void burbujaMejorado(Cliente[] arre){
+    public static void burbujaMejorado(Cliente[] arre) {
         boolean bandera = true;
         Cliente aux;
         int i = 0;
         int tam = arre.length;
 
         while (i < tam - 1 && bandera) {
-            bandera = false;//en el caso que no se realicen intercambios, corta
+            bandera = false;// en el caso que no se realicen intercambios, corta
 
             for (int j = 0; j < tam - 1 - i; j++) {
                 if (arre[j].getId() < arre[j + 1].getId()) {
-                    bandera = true;//se realizo un intercambios
+                    bandera = true;// se realizo un intercambios
                     aux = (arre[j]);
                     arre[j] = arre[j + 1];
                     arre[j + 1] = aux;
@@ -77,7 +84,5 @@ public class OrdenarClientesTask implements Callable<Cliente[]> {
             i++;
         }
     }
-
- 
 
 }
