@@ -21,7 +21,7 @@ public class PrestamoTask implements Callable<Double> {
     private List<Cliente> clientes;
 
     /**
-     * 
+     * Constructor.
      * 
      * @param clientes los clientes
      */
